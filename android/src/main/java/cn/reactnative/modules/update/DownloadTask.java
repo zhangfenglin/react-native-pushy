@@ -65,7 +65,7 @@ class DownloadTask extends AsyncTask<DownloadTaskParams, Void, Void> {
         }
     }
 
-    private void downloadFile(String url, File writePath) throws IOException {
+    private void downloadFile(String url, File writePath, DownloadTaskParams param) throws IOException {
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder().url(url)
                 .build();
@@ -91,6 +91,9 @@ class DownloadTask extends AsyncTask<DownloadTaskParams, Void, Void> {
         long totalRead = 0;
         while ((bytesRead = source.read(sink.buffer(), DOWNLOAD_CHUNK_SIZE)) != -1) {
             totalRead += bytesRead;
+            if (param != null) {
+                param.listener.onDownloadProgress(contentLength, totalRead);
+            }
             if (UpdateContext.DEBUG) {
                 Log.d("RNUpdate", "Progress " + totalRead + "/" + contentLength);
             }
@@ -216,7 +219,7 @@ class DownloadTask extends AsyncTask<DownloadTaskParams, Void, Void> {
     }
 
     private void doDownload(DownloadTaskParams param) throws IOException {
-        downloadFile(param.url, param.zipFilePath);
+        downloadFile(param.url, param.zipFilePath, param);
 
         ZipInputStream zis = new ZipInputStream(new BufferedInputStream(new FileInputStream(param.zipFilePath)));
         ZipEntry ze;
@@ -264,7 +267,7 @@ class DownloadTask extends AsyncTask<DownloadTaskParams, Void, Void> {
     }
 
     private void doPatchFromApk(DownloadTaskParams param) throws IOException, JSONException {
-        downloadFile(param.url, param.zipFilePath);
+        downloadFile(param.url, param.zipFilePath, param);
 
         ZipInputStream zis = new ZipInputStream(new BufferedInputStream(new FileInputStream(param.zipFilePath)));
         ZipEntry ze;
@@ -328,7 +331,7 @@ class DownloadTask extends AsyncTask<DownloadTaskParams, Void, Void> {
     }
 
     private void doPatchFromPpk(DownloadTaskParams param) throws IOException, JSONException {
-        downloadFile(param.url, param.zipFilePath);
+        downloadFile(param.url, param.zipFilePath, param);
 
         ZipInputStream zis = new ZipInputStream(new BufferedInputStream(new FileInputStream(param.zipFilePath)));
         ZipEntry ze;

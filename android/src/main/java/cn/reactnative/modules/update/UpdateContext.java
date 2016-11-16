@@ -15,7 +15,11 @@ public class UpdateContext {
     private Context context;
     private File rootDir;
 
-    public static boolean DEBUG = false;
+    public static boolean DEBUG = true;
+
+    public Context getContext() {
+        return context;
+    }
 
     public UpdateContext(Context context) {
         this.context = context;
@@ -58,6 +62,7 @@ public class UpdateContext {
     public interface DownloadFileListener {
         void onDownloadCompleted();
         void onDownloadFailed(Throwable error);
+        void onDownloadProgress(long contentLength, long totalRead);
     }
 
     public void downloadFile(String url, String hashName, DownloadFileListener listener) {
@@ -208,6 +213,10 @@ public class UpdateContext {
 
             @Override
             public void onDownloadFailed(Throwable error) {
+            }
+
+            @Override
+            public void onDownloadProgress(long totalLength, long currentLength) {
             }
         };
         new DownloadTask(context).execute(params);
