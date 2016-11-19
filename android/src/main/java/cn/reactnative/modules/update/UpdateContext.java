@@ -63,6 +63,7 @@ public class UpdateContext {
         void onDownloadCompleted();
         void onDownloadFailed(Throwable error);
         void onDownloadProgress(long contentLength, long totalRead);
+        void onUpdateUnzipProgress(String name);
     }
 
     public void downloadFile(String url, String hashName, DownloadFileListener listener) {
@@ -217,6 +218,11 @@ public class UpdateContext {
 
             @Override
             public void onDownloadProgress(long totalLength, long currentLength) {
+            }
+
+            @Override
+            public void onUpdateUnzipProgress(String name) {
+
             }
         };
         new DownloadTask(context).execute(params);

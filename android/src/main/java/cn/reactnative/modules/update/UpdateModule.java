@@ -82,6 +82,11 @@ public class UpdateModule extends ReactContextBaseJavaModule{
             public void onDownloadProgress(long contentLength, long totalRead) {
                 updateDownloadProgress(contentLength, totalRead);
             }
+
+            @Override
+            public void onUpdateUnzipProgress(String name) {
+                updateUnzipProgress(name);
+            }
         });
     }
 
@@ -103,6 +108,11 @@ public class UpdateModule extends ReactContextBaseJavaModule{
             @Override
             public void onDownloadProgress(long contentLength, long totalRead) {
                 updateDownloadProgress(contentLength, totalRead);
+            }
+
+            @Override
+            public void onUpdateUnzipProgress(String name) {
+                updateUnzipProgress(name);
             }
         });
     }
@@ -126,6 +136,11 @@ public class UpdateModule extends ReactContextBaseJavaModule{
             @Override
             public void onDownloadProgress(long contentLength, long totalRead) {
                 updateDownloadProgress(contentLength, totalRead);
+            }
+
+            @Override
+            public void onUpdateUnzipProgress(String name) {
+                updateUnzipProgress(name);
             }
         });
     }
@@ -195,5 +210,11 @@ public class UpdateModule extends ReactContextBaseJavaModule{
         params.putInt("totalRead", (int) totalRead);
         params.putInt("contentLength", (int) contentLength);
         getReactApplicationContext().getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit("RCTHotUpdateDownloadProgress", params);
+    }
+
+    void updateUnzipProgress(String name) {
+        WritableMap params = Arguments.createMap();
+        params.putString("name", name);
+        getReactApplicationContext().getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit("RCTHotUpdateUnzipProgress", params);
     }
 }

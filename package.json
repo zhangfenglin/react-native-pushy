@@ -1,5 +1,5 @@
 {
-    "name": "react-native-update",
+    "name": "@zhangfenglin/react-native-update",
     "version": "3.0.2",
     "description": "react-native hot update",
     "main": "lib/index.js",

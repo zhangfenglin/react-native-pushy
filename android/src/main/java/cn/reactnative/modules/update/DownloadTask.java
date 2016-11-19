@@ -242,6 +242,9 @@ class DownloadTask extends AsyncTask<DownloadTaskParams, Void, Void> {
                 continue;
             }
 
+            if (param != null && param.listener != null) {
+                param.listener.onUpdateUnzipProgress(fmd.getName());
+            }
             unzipToFile(zis, fmd);
         }
 
@@ -318,7 +321,9 @@ class DownloadTask extends AsyncTask<DownloadTaskParams, Void, Void> {
                 fmd.mkdirs();
                 continue;
             }
-
+            if (param != null && param.listener != null) {
+                param.listener.onUpdateUnzipProgress(fmd.getName());
+            }
             unzipToFile(zis, fmd);
         }
 
@@ -384,7 +389,9 @@ class DownloadTask extends AsyncTask<DownloadTaskParams, Void, Void> {
                 fmd.mkdirs();
                 continue;
             }
-
+            if (param != null && param.listener != null) {
+                param.listener.onUpdateUnzipProgress(fmd.getName());
+            }
             unzipToFile(zis, fmd);
         }
 
