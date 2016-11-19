@@ -34,8 +34,6 @@
     "mkdir-recursive": "^0.2.1",
     "node-apk-parser": "^0.2.3",
     "progress": "^1.1.8",
-    "react": "^15.4.0",
-    "react-native": "^0.33.1",
     "read": "^1.0.7",
     "request": "^2.69.0",
     "rimraf": "^2.5.2",
