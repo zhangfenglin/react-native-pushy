@@ -1,6 +1,8 @@
 package cn.reactnative.modules.update;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -75,6 +77,11 @@ class DownloadTask extends AsyncTask<DownloadTaskParams, Void, Void> {
         }
         ResponseBody body = response.body();
         long contentLength = body.contentLength();
+
+        if (param != null && param.listener != null) {
+            param.listener.onContentLength(contentLength);
+        }
+
         BufferedSource source = body.source();
 
         if (writePath.exists()) {
@@ -92,7 +99,7 @@ class DownloadTask extends AsyncTask<DownloadTaskParams, Void, Void> {
         while ((bytesRead = source.read(sink.buffer(), DOWNLOAD_CHUNK_SIZE)) != -1) {
             totalRead += bytesRead;
             if (param != null) {
-                param.listener.onDownloadProgress(contentLength, totalRead);
+                param.listener.onUpdateProgress(totalRead);
             }
             if (UpdateContext.DEBUG) {
                 Log.d("RNUpdate", "Progress " + totalRead + "/" + contentLength);
@@ -421,6 +428,12 @@ class DownloadTask extends AsyncTask<DownloadTaskParams, Void, Void> {
         }
     }
 
+    private void doApkDownload(DownloadTaskParams param) throws IOException {
+        downloadFile(param.url, param.zipFilePath, param);
+        if (UpdateFileUtil.isApkCanInstall(context, param.zipFilePath.getPath()))
+            UpdateFileUtil.installApk(context, param.zipFilePath.getPath());
+    }
+
     @Override
     protected Void doInBackground(DownloadTaskParams... params) {
         try {
@@ -436,6 +449,9 @@ class DownloadTask extends AsyncTask<DownloadTaskParams, Void, Void> {
                     break;
                 case DownloadTaskParams.TASK_TYPE_CLEARUP:
                     doCleanUp(params[0]);
+                    break;
+                case DownloadTaskParams.TASK_TYPE_FROM_APK:
+                    doApkDownload(params[0]);
                     break;
             }
             params[0].listener.onDownloadCompleted();

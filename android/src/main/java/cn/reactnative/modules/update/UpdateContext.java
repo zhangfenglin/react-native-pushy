@@ -62,7 +62,8 @@ public class UpdateContext {
     public interface DownloadFileListener {
         void onDownloadCompleted();
         void onDownloadFailed(Throwable error);
-        void onDownloadProgress(long contentLength, long totalRead);
+        void onUpdateProgress(long totalRead);
+        void onContentLength(long contentLength);
         void onUpdateUnzipProgress(String name);
     }
 
@@ -98,6 +99,16 @@ public class UpdateContext {
         params.zipFilePath = new File(rootDir, originHashName + "-" + hashName + ".ppk.patch");
         params.unzipDirectory = new File(rootDir, hashName);
         params.originDirectory = new File(rootDir, originHashName);
+        new DownloadTask(context).execute(params);
+    }
+
+    public void downloadFromApk(String url, String hashName, DownloadFileListener listener){
+        DownloadTaskParams params = new DownloadTaskParams();
+        params.type = DownloadTaskParams.TASK_TYPE_FROM_APK;
+        params.url = url;
+        params.hash = hashName;
+        params.listener = listener;
+        params.zipFilePath = UpdateFileUtil.getApkFile(context, hashName); //new File(rootDir, hashName + ".apk");
         new DownloadTask(context).execute(params);
     }
 
@@ -217,7 +228,13 @@ public class UpdateContext {
             }
 
             @Override
-            public void onDownloadProgress(long totalLength, long currentLength) {
+            public void onUpdateProgress(long totalRead) {
+
+            }
+
+            @Override
+            public void onContentLength(long max) {
+
             }
 
             @Override

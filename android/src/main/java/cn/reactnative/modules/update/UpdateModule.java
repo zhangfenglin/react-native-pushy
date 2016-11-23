@@ -79,8 +79,13 @@ public class UpdateModule extends ReactContextBaseJavaModule{
             }
 
             @Override
-            public void onDownloadProgress(long contentLength, long totalRead) {
-                updateDownloadProgress(contentLength, totalRead);
+            public void onUpdateProgress(long totalRead) {
+                updateDownloadProgress(totalRead);
+            }
+
+            @Override
+            public void onContentLength(long contentLength) {
+                updateContentLength(contentLength);
             }
 
             @Override
@@ -106,8 +111,13 @@ public class UpdateModule extends ReactContextBaseJavaModule{
             }
 
             @Override
-            public void onDownloadProgress(long contentLength, long totalRead) {
-                updateDownloadProgress(contentLength, totalRead);
+            public void onUpdateProgress(long totalRead) {
+                updateDownloadProgress(totalRead);
+            }
+
+            @Override
+            public void onContentLength(long contentLength) {
+                updateContentLength(contentLength);
             }
 
             @Override
@@ -134,8 +144,13 @@ public class UpdateModule extends ReactContextBaseJavaModule{
             }
 
             @Override
-            public void onDownloadProgress(long contentLength, long totalRead) {
-                updateDownloadProgress(contentLength, totalRead);
+            public void onUpdateProgress(long totalRead) {
+                updateDownloadProgress(totalRead);
+            }
+
+            @Override
+            public void onContentLength(long contentLength) {
+                updateContentLength(contentLength);
             }
 
             @Override
@@ -205,10 +220,9 @@ public class UpdateModule extends ReactContextBaseJavaModule{
         });
     }
 
-    void updateDownloadProgress(long contentLength, long totalRead) {
+    void updateDownloadProgress(long totalRead) {
         WritableMap params = Arguments.createMap();
         params.putInt("totalRead", (int) totalRead);
-        params.putInt("contentLength", (int) contentLength);
         getReactApplicationContext().getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit("RCTHotUpdateDownloadProgress", params);
     }
 
@@ -216,5 +230,11 @@ public class UpdateModule extends ReactContextBaseJavaModule{
         WritableMap params = Arguments.createMap();
         params.putString("name", name);
         getReactApplicationContext().getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit("RCTHotUpdateUnzipProgress", params);
+    }
+
+    void updateContentLength(long contentLength) {
+        WritableMap params = Arguments.createMap();
+        params.putInt("contentLength", (int)contentLength);
+        getReactApplicationContext().getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit("RCTHotUpdateDownloadContentLength", params);
     }
 }
