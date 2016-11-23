@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/dialog_bg"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/ll_title_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/layout_border_gap"
+            android:layout_marginTop="@dimen/layout_border_gap"
+            android:gravity="center"
+            android:padding="@dimen/layout_border_gap"
+            android:textColor="@color/bg_title"
+            android:textSize="16sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/line_gap"
+            android:background="@color/color_line" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_msg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/layout_border_big_gap"
+        android:textColor="@color/color_4d4d4d"
+        android:textSize="18sp" />
+
+    <ProgressBar
+        android:id="@+id/dialog_progress"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="@dimen/layout_border_big_gap"
+        android:layout_marginRight="@dimen/layout_border_big_gap"
+        android:layout_marginTop="@dimen/layout_border_gap"
+        android:background="@drawable/bg_border"
+        android:max="100"
+        android:progressDrawable="@drawable/download_progressbar" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/layout_border_big_gap"
+        android:layout_marginLeft="@dimen/layout_border_big_gap"
+        android:layout_marginRight="@dimen/layout_border_big_gap"
+        android:layout_marginTop="@dimen/layout_border_gap">
+
+        <TextView
+            android:id="@+id/tv_progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textColor="#4c6db1" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="0%"
+            android:textColor="#4c6db1"
+            android:visibility="invisible" />
+    </RelativeLayout>
+
+</LinearLayout>

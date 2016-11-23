@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <dimen name="line_gap">0.5dip</dimen>
+  <dimen name="layout_border_gap">8dip</dimen>
+  <dimen name="layout_border_big_gap">16dip</dimen>
+</resources>
