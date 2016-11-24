@@ -10,6 +10,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
 import okhttp3.FormBody;
@@ -38,8 +39,11 @@ public class UpdateHelper {
     public static void checkUpdate(String appKey, final UpdateContext updateContext, final NativeUpdateListener listener, final boolean expired){
         if (TextUtils.isEmpty(appKey))
             throw new RuntimeException("AppKey must not be empty.");
+
+        clearCache(updateContext.getContext());
+
         String url = String.format("%s/checkUpdate/%s", HOST, appKey);
-        OkHttpClient client = new OkHttpClient();
+        OkHttpClient client = new OkHttpClient.Builder().readTimeout(60, TimeUnit.SECONDS).writeTimeout(60, TimeUnit.SECONDS).connectTimeout(60, TimeUnit.SECONDS).build();
 
         String currentVersion = updateContext.getCurrentVersion();
 
@@ -69,13 +73,9 @@ public class UpdateHelper {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                String res = response.body().string();
-                Log.i("NativeUpdate", res);
-
                 try {
-                    download(res, updateContext, listener, handler, expired);
+                    download(response.body().string(), updateContext, listener, handler, expired);
                 } catch (JSONException e) {
-                    Log.i(TAG, e.getMessage());
                     if (listener != null) {
                         listener.finish();
                     }
@@ -108,7 +108,9 @@ public class UpdateHelper {
     }
 
     private static void download(String response, final UpdateContext updateContext, final NativeUpdateListener listener, final Handler handler, boolean expired) throws JSONException {
-        JSONObject json = new JSONObject(response);
+        if (UpdateContext.DEBUG)
+            Log.i(TAG, response != null ? response : "");
+        final JSONObject json = new JSONObject(response);
         if (!json.optBoolean("update") && !json.optBoolean("expired")) {
             if (listener != null) {
                 listener.finish();
@@ -119,7 +121,12 @@ public class UpdateHelper {
         UpdateContext.DownloadFileListener downloadFileListener = new UpdateContext.DownloadFileListener() {
             @Override
             public void onDownloadCompleted() {
-                updateContext.markSuccess();
+                if (TextUtils.isEmpty(json.optString("downloadUrl"))) {
+                    Log.i(TAG, "switchVersion " + json.optString("hash"));
+                    updateContext.switchVersion(json.optString("hash"));
+                    updateContext.markSuccess();
+                }
+
                 handler.sendMessage(handler.obtainMessage(UPDATE_FINISH, 0, 0));
                 if (listener != null) {
                     listener.finish();
