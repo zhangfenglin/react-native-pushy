@@ -1,6 +1,7 @@
 package cn.reactnative.modules.update;
 
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
@@ -36,7 +37,14 @@ public class UpdateHelper {
         void finish();
     }
 
-    public static void checkUpdate(String appKey, final UpdateContext updateContext, final NativeUpdateListener listener, final boolean expired){
+    public static void checkUpdate(final UpdateContext updateContext, final NativeUpdateListener listener, final boolean expired){
+        String appKey = null;
+        try {
+            appKey = updateContext.getContext().getPackageManager().getApplicationInfo(updateContext.getContext().getPackageName(), PackageManager.GET_META_DATA).metaData.getString("PUSHY_APPKEY");
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
         if (TextUtils.isEmpty(appKey))
             throw new RuntimeException("AppKey must not be empty.");
 
