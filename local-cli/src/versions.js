@@ -69,7 +69,7 @@ async function chooseVersion(appId) {
 export const commands = {
   publish: async function({args, options}) {
     const fn = args[0];
-    const {name, description, metaInfo } = options;
+    const {name, description, metaInfo, versionName, packageId} = options;
 
     if (!fn) {
       throw new Error('Usage: pushy publish <ppkFile> --platform ios|android');
@@ -81,16 +81,19 @@ export const commands = {
     const { hash } = await uploadFile(fn);
 
     const { id } = await post(`/app/${appId}/version/create`, {
-      name: name || await question('Enter version name:') || '(未命名)',
+      name: versionName || name || await question('Enter version name:') || '(未命名)',
       hash,
       description: description || await question('Enter description:'),
       metaInfo: metaInfo || await question('Enter meta info:'),
     });
     console.log(`Version published: ${id}`);
-
-    const v = await question('Would you like to bind packages to this version?(Y/N)');
-    if (v.toLowerCase() === 'y') {
-      await this.update({args:[], options:{versionId: id, platform}});
+    if (packageId) {
+      await this.update({ args: [], options: { versionId: id, platform, packageId} });
+    }else {
+      const v = await question('Would you like to bind packages to this version?(Y/N)');
+      if (v.toLowerCase() === 'y') {
+        await this.update({args:[], options:{versionId: id, platform}});
+      }
     }
   },
   versions: async function({options}) {

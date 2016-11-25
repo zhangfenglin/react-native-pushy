@@ -423,12 +423,25 @@ export const commands = {
 
     await pack(realIntermedia, realOutput);
 
-    const v = await question('Would you like to publish it?(Y/N)');
-    if (v.toLowerCase() === 'y') {
+
+    let {versionName, description, metaInfo, packageId, publish} = options
+
+    if (publish && versionName && packageId) {
       await this.publish({args: [realOutput], options: {
-        platform,
+        platform,versionName, description, metaInfo, packageId
       }})
     }
+    else {
+      const v = await question('Would you like to publish it?(Y/N)');
+      if (v.toLowerCase() === 'y') {
+        await this.publish({args: [realOutput], options: {
+          platform,
+        }})
+      }
+    }
+  },
+  jenkinsBundle: async function({options}){
+    await this.bundle({options})
   },
 
   async diff({args, options}) {

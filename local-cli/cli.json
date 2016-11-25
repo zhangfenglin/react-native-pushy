@@ -118,6 +118,51 @@
         }
       }
     },
+    "jenkinsBundle": {
+      "description": "Bundle javascript code only.",
+      "options": {
+        "dev": {
+          "default": false
+        },
+        "platform": {
+          "hasValue": true
+        },
+        "entryFile": {
+          "default": "index.${platform}.js",
+          "hasValue": true
+        },
+        "intermediaDir": {
+          "default": "build/intermedia/${platform}",
+          "hasValue": true
+        },
+        "output": {
+          "default": "build/output/${platform}.${time}.ppk",
+          "hasValue": true
+        },
+        "verbose": {
+
+        },
+        "versionName":{
+          "default":"0.0.1",
+          "hasValue": true
+        },
+        "description":{
+          "default":"",
+          "hasValue": true
+        },
+        "metaInfo": {
+          "default":"",
+          "hasValue": true
+        },
+        "packageId": {
+          "default":"",
+          "hasValue": true
+        },
+        "publish": {
+          "default": false
+        }
+      }
+    },
     "release": {
       "description": "Push builded file to server."
     },

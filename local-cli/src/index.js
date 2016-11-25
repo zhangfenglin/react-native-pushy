@@ -14,12 +14,12 @@ function printUsage({args}) {
 }
 
 const commands = {
-  ...require('./user').commands,
-  ...require('./bundle').commands,
-  ...require('./app').commands,
-  ...require('./package').commands,
-  ...require('./versions').commands,
-  help: printUsage,
+    ...require('./user').commands,
+    ...require('./bundle').commands,
+    ...require('./app').commands,
+    ...require('./package').commands,
+    ...require('./versions').commands,
+    help: printUsage,
 };
 
 exports.run = function () {
